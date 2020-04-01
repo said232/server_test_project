@@ -52,37 +52,26 @@ function addUser(pool,req) {
 
 app.use(bodyParser.json());
 
-function doesEmailExist(pool, email) {
-  const query = "SELECT * FROM users WHERE email = $1";
-  return pool.query(query, [email]).then(res => {
-    return res.rows.length > 0;
-  });
-}
+// function doesEmailExist(pool, email) {
+//   const query = "SELECT * FROM users WHERE email = $1";
+//   return pool.query(query, [email]).then(res => {
+//     return res.rows.length > 0;
+//   });
+// }
 
 app.post("/users", function(req, res) {
-  const newName = req.body.name;
-  const newEmail = req.body.email;
 
-  doesEmailExist(pool, newEmail).then(response => {
-    // console.log(response)
-    // reponse is a boolean
-    // response is true when email exists in the DB and response is false when email does not exist in the DB
-
-    // foo should be a boolean
-    // foo should be true when the email exists in the DB and foo should be false when the email does not exist in the DB
-
-    if (response) {
-      return res.send("exists");
-    } else {
-      // new function that:
-      // creates a new user in the DB
-      const foo = addUser(pool,req).then(response=> {
+  addUser(pool,req).then(response=> {
         
-        res.status(201).send('created')
-      })
-      
-    }
-  });
+    res.status(201).send('created')
+  }).catch(err => {
+
+    // check err -- if err tells me that the UNIQUE constraint was violated
+    // then res.status(409).send('email already exists')
+
+    res.status(500).send('There was some')
+  })
+  
   
   // then res.send('exists') or res.send('does not exist')
 
