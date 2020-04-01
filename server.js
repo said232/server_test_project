@@ -2,12 +2,13 @@ const express = require("express");
 const app = express();
 const { Pool } = require("pg");
 const bodyParser = require("body-parser");
+const secret = require("./secret");
 
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
   database: "test_project",
-  password: "secret.dbPassword",
+  password: secret.dbPassword,
   port: 5432
 });
 
