@@ -3,6 +3,7 @@ const app = express();
 const { Pool } = require("pg");
 const bodyParser = require("body-parser");
 const secret = require("./secret");
+const cors = require("cors");
 
 const pool = new Pool({
   user: "postgres",
@@ -11,6 +12,7 @@ const pool = new Pool({
   password: secret.dbPassword,
   port: 5432
 });
+app.use(cors());
 
 app.get("/", function(req, res) {
   res.send("hello world");
